@@ -1,11 +1,11 @@
 var videos = [
     // "ueik_Uu4xbo",
-    // "og8bbxl0iW8",
+    // "og8bbxl0iW8",  
     // "Uy1KnGEVpTA",
     // // "_8fjTcV_9qI",
     // "UmclL6funN8",
     // "eTAsANPVqB8",
-    // "ZvX4KElPq2k",
+    // "ZvX4KElPq2k",    
     // "9lpFiNe_AoE",
     // "nN_gCsKu2k4",
     // "xYInTHcdkWc",
@@ -28,9 +28,9 @@ var videos = [
 ];
 
 if (videos.length === 0) {
-    videos = JSON.parse(localStorage.getItem("LiveCamVideos"));
+    videos = JSON.parse(localStorage.getItem('LiveCamVideos'))
 } else {
-    localStorage.setItem("LiveCamVideos", JSON.stringify(videos));
+    localStorage.setItem('LiveCamVideos', JSON.stringify(videos))
 }
 
 var players = new Array();
@@ -39,7 +39,8 @@ var ytPlayers = new Array();
 // load IFrame Player API code asynchronously
 var tag = document.createElement("script");
 tag.src = "https://www.youtube.com/iframe_api";
-tag.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
+tag.allow =
+    "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
 var firstScriptTag = document.getElementsByTagName("script")[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
@@ -56,27 +57,39 @@ for (i = 0; i < videos.length; i++) {
     bodyWrapper.appendChild(bodyContainer);
     bodyContainer.appendChild(bodyPlayer);
     document.body.appendChild(bodyWrapper);
+    //setTimeout(muteVideo, 1000);
 }
 
 // create <iframe> after API loads
-var player = new Array(); // saving the references, or could do this -- var player = YT.get('id-of-youtube-iframe');
+var player;
 function onYouTubeIframeAPIReady() {
     var i;
     for (i = 0; i < videos.length; i++) {
-        player[i] = new YT.Player("player" + i, {
+        player = new YT.Player("player" + i, {
             videoId: videos[i],
             events: {
                 onReady: onPlayerReady,
                 onStateChange: onPlayerStateChange,
             },
         });
+ //       setTimeout(muteVideo, 1000);
     }
 }
 
 // called when API is ready
 function onPlayerReady(event) {
     event.target.playVideo();
-    event.target.mute();
+    player.mute();
+    console.log("video url -- " + player.getVideoUrl());
+    console.log("called onPlayerReady")
 }
 
-function onPlayerStateChange(event) {}
+function onPlayerStateChange(event) {
+    //setTimeout(muteVideo, 6000);
+}
+
+function muteVideo() {
+  player.mute();
+  console.log("called muteVideo")
+}
+
